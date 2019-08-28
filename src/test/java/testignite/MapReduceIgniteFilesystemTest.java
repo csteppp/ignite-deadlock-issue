@@ -4,6 +4,7 @@ import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteException;
 import org.apache.ignite.IgniteFileSystem;
 import org.apache.ignite.compute.ComputeJobResult;
+import org.apache.ignite.compute.ComputeTaskMapAsync;
 import org.apache.ignite.configuration.FileSystemConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.igfs.IgfsInputStream;
@@ -33,13 +34,13 @@ import static org.junit.Assert.assertTrue;
 
 
 /**
- * This test demonstrates two problems.
- * 1.  Why do map reduce jobs run in the SYS pool instead of the PUBLIC pool?
+ * This test demonstrates two problems in Ignite Filesystem.
+ * 1.  Why do map reduce jobs run in the SYS pool instead oWf the PUBLIC pool?
  * 2.  Any map reduce job that writes or reads from igfs will cause a deadlock .
  *
  * Help!
  */
-public class MapReduceIgniteTest {
+public class MapReduceIgniteFilesystemTest {
 
     private Ignite serverIgnite;
 
@@ -114,6 +115,7 @@ public class MapReduceIgniteTest {
     /**
      * A class that deadlocks because
      */
+    @ComputeTaskMapAsync
     private static class IgfsTaskThatWrites extends IgfsTask<Object, Object> {
         private final IgfsPath path;
         private final IgniteFileSystem igfsClient;
